@@ -1,0 +1,109 @@
+<project name="template-package" default="package" basedir=".">
+    
+  <target name="package">
+
+    <taskdef name="propack" classname="com.progress.oeant.task.ProPack" classpath="${DLC}/java/oe/oeant-${dlcVersion}.jar" />
+    <taskdef name="prosign" classname="com.progress.oeant.task.ProSign" classpath="${DLC}/java/oe/oeant-${dlcVersion}.jar" />
+
+    <fileset dir="${builddir}/rcode" id="server-rcode">
+      <include name="**/*.r" />
+      <exclude name="src/adm2/*.r" />
+      <exclude name="src/adecomm/*.r" />
+      <exclude name="**/*_UT.r" />
+      <exclude name=".pct/**/*" />
+    </fileset>
+
+    <!-- server .pl library 
+    <PCTLibrary destFile="${artifactdir}/template-server.pl" dlchome="${DLC}" noCompress="true" cpInternal="utf-8" cpStream="utf-8">
+      <fileset refid="server-rcode" />
+    </PCTLibrary>
+
+    <propack 
+        destFile="${artifactdir}/template-server-loose.apl" 
+        title="Template Server"
+        vendor="bfv.io"
+        version="$(package-version)"
+        vendorid="io.bfv"
+        type="apl"
+        signaturePolicy="open"
+        validationPolicy="none">
+      
+      <manifest>
+        <attribute name="app-version" value="${release.version}"/>
+      </manifest>
+
+      <fileset refid="server-rcode" />
+    </propack>
+    -->
+    <propack 
+        destFile="${artifactdir}/test1.apl" 
+        title=".APL test"
+        vendor="bfv.io"
+        version="1.0.0-1"
+        vendorid="io.bfv"
+        type="apl"
+        signaturePolicy="required"
+        validationPolicy="fail">
+      
+      <manifest>
+        <attribute name="app-version" value="1.0"/>
+        <attribute name="app-name" value="apl-test" />
+        <attribute name="Build-Date" value="${build.date.oe}" />
+      </manifest>
+
+      <fileset refid="server-rcode" />
+    </propack>
+
+    <prosign 
+        archive="${artifactdir}/test1.apl" 
+        signedarchive="${artifactdir}/test1-signed.apl" 
+        alias="codesign-trusted"
+        keystore="cicd/bfv-io-codesign.pfx" 
+        storepass="^*vsP%j442wt$k^%7WmJ7K3%JbogqegD"   
+         /> 
+    <!--
+    <propack 
+        destFile="${artifactdir}/template-unittests.apl" 
+        title="Unit tests for Template"
+        vendor="bfv.io"
+        version="${release.version}"
+        vendorid="io.bfv"
+        type="apl"
+        signaturePolicy="open"
+        validationPolicy="none">
+      
+      <manifest>
+        <attribute name="app-version" value="${release.version}"/>
+      </manifest>
+
+      <fileset dir="${builddir}/rcode">
+        <include name="**/*_UT.r" />
+        <exclude name=".pct/**/*" />
+      </fileset>
+
+    </propack>
+    -->
+
+    <!--
+    <copy file="${DLC}/tty/OpenEdge.Core.apl" todir="${artifactdir}" />
+    <copy file="${DLC}/tty/netlib/OpenEdge.Net.apl" todir="${artifactdir}" />
+
+    <zip destfile="${artifactdir}/xref.zip" filesonly="true">
+      <fileset dir="${builddir}/xref_out">
+        <include name="**/*.xref" />
+      </fileset>
+    </zip>
+    -->
+    <!-- schema files -->
+    <!--
+    <mkdir dir="${artifactdir}/schema" />
+    <copy todir="${artifactdir}/schema" includeEmptyDirs="false">
+      <fileset dir="${dfdir}">
+        <include name="**/*.df" />
+        <include name="**/*.st" />
+      </fileset>
+    </copy>
+    -->
+  </target>
+
+</project>

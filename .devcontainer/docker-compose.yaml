@@ -1,0 +1,40 @@
+services:
+
+  devcontainer:
+    image: ${DEVCONTAINER_IMAGE}
+    pull_policy: always
+    volumes:
+      - ../:/workspaces/content:cached  # always mount to same folder
+      - ${PROGRESS_CFG}:/usr/dlc/progress.cfg:ro
+      #- /var/run/docker.sock:/var/run/docker.sock  # only if really needed
+    # ports:
+    #   - ${DEBUG_PORT}:3099
+    command: sleep infinity
+
+  db:
+    image: ${DB_IMAGE}
+    volumes:
+      - ${PROGRESS_CFG}:/usr/dlc/progress.cfg:ro
+      - ../db/schema:/app/schema
+      - ../db/data:/app/data
+      - ../webhandlers:/app/webhandlers:ro
+    ports:
+      - 10000-10010:10000-10010
+    environment:
+      - DBNAME=sports2020    
+      
+  pas:
+    image: ${PAS_IMAGE}
+    volumes:
+      - ${PROGRESS_CFG}:/usr/dlc/progress.cfg:ro
+      - ../src:/app/src
+      - ../config/as.pf:/app/pas/as.pf
+    ports:
+      - ${PAS_PORT:-8810}:8810
+    # environment:
+    #   - PASWEBHANDLERS=/app/webhandlers/ROOT.handlers
+    command: /app/pas/start.sh
+    depends_on:
+      - db
+    
+

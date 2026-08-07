@@ -1,0 +1,23 @@
+<project name="databases">
+
+  <macrodef name="builddb">
+    
+    <attribute name="dbname" />
+    <attribute name="destDir" />
+    <attribute name="multiTenant" default="false" />
+    <attribute name="schemaDir"/>
+
+    <sequential>
+      <PCTCreateDatabase dbName="@{dbname}" destDir="@{destDir}" dlchome="${DLC}" schemaFile="@{schemaDir}/@{dbname}.df" structFile="@{schemaDir}/@{dbname}.st" multiTenant="@{multiTenant}" tempDir="${tmpdir}"/>
+    </sequential>
+  </macrodef> 
+
+  <DBConnectionSet id="compiledbs">
+    <!--
+    <DBConnection dbName="sports2020" dbDir="${dbsdir}" singleUser="true" readOnly="true">
+      <Alias name="sports2020" />
+    </DBConnection>
+    -->
+  </DBConnectionSet>   
+
+</project>

@@ -1,0 +1,45 @@
+{
+    "name": "DevContainer Template",
+    "dockerComposeFile": "docker-compose.yaml",
+    "service": "devcontainer",
+    "workspaceFolder": "/workspaces/content",
+    "features": {
+    },
+    // Configure tool-specific properties.
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            "settings": {
+                "abl.configuration.runtimes.default": "12.8",
+                "abl.configuration.runtimes": [
+                    {
+                        "name": "12.8",
+                        "path": "/usr/dlc"
+                    }
+                ],
+                "abl.langServerJavaExecutable": "/opt/java/openjdk/bin/java",
+                "abl.buildMode": 1
+            },
+            "extensions": [
+                "riversidesoftware.openedge-abl-lsp@prerelease",
+                "progress-software.progress-openedge-mcp-connector-abl",
+                "vdende.vscode-scratch-playground",
+            ]
+        }
+    },
+    "mounts": [
+        "source=${localEnv:USERPROFILE}/.gitconfig,target=/home/openedge/.gitconfig,type=bind,consistency=cached,readonly",
+        "source=${localEnv:USERPROFILE}/.gitconfig-devpod,target=/home/openedge/.gitconfig-devpod,type=bind,consistency=cached",
+        "source=${localEnv:USERPROFILE}/.ssh/id_ed25519_sk.pub,target=/home/openedge/.ssh/id_ed25519_sk.pub,type=bind,consistency=cached,readonly"
+    ],
+    "containerEnv": {
+        "GIT_CONFIG_COUNT": "1",
+        "GIT_CONFIG_KEY_0": "safe.directory",
+        "GIT_CONFIG_VALUE_0": "/workspaces/${localWorkspaceFolderBasename}",
+        "PROPATH": "./src,./bin",
+        "OE_MCP_API_KEY": "${localEnv:OE_MCP_API_KEY}"
+    },
+    "forwardPorts": [],
+    //"postStartCommand": "bash .devcontainer/post-start.sh",
+    "shutdownAction": "none"
+}

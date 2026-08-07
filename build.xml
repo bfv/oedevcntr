@@ -1,0 +1,99 @@
+<project name="build" default="build" basedir=".">
+    
+  <taskdef resource="PCT.properties" />
+  <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+  <typedef resource="types.properties" />
+
+  <property environment="env"/>
+
+  <import file="cicd/initvars.xml" />   <!-- initvars -->
+  <import file="cicd/databases.xml" />  <!-- builddb macro -->
+  <import file="cicd/package.xml" />    <!-- package target -->
+  
+  <target name="build" depends="initvars,init">
+  	<antcall target="builddbs" />
+    <antcall target="compile" />
+    <antcall target="unittest" />
+    <antcall target="package" />
+  </target>
+
+  <!-- geen packaging en dergelijke voor de CI build -->
+  <target name="ci" depends="initvars,init">
+  	<antcall target="builddbs" /> 
+    <antcall target="compile" />
+    <antcall target="unittest" />
+  </target>
+
+  <target name="init" unless="initialized">
+    <delete dir="${builddir}" failonerror="false" />
+    <mkdir dir="${builddir}" />  
+    <mkdir dir="${builddir}/tmp" />
+    <delete dir="${artifactdir}" failonerror="false" />
+    <mkdir dir="${artifactdir}" />
+    <property name="initialized" value="true" />    
+    <echo message="test of tmpdir ${tmpdir} writable is" />
+  </target>
+  
+  <target name="builddbs">
+    <mkdir dir="${dbsdir}" />
+
+    <for list="sports2020" param="dbname">
+      <sequential>
+        <builddb dbname="@{dbname}" destDir="${dbsdir}" schemaDir="${dfdir}" />
+      </sequential>
+    </for>
+
+  </target>
+
+	<target name="compile" depends="initvars">
+    
+    <mkdir dir="${builddir}/xref_out" />
+      
+    <PCTCompile destdir="${builddir}/rcode" dlchome="${DLC}" stopOnError="false" 
+        graphicalMode="false" forceCompile="true" MD5="true" 
+        noParse="true"
+        paramfile="${cicdfilesdir}/build-ci.compile.pf"
+        numThreads="8"
+        progPerc="10"
+        tempDir="${tmpdir}"
+        keepXref="true" xrefDir="${builddir}/xref_out"
+        requireFullKeywords="true" requireFullNames="true" requireFieldQualifiers="true" requireReturnValues="true"
+        >
+      
+      <DBConnectionSet refid="compiledbs" />
+			
+      <propath>
+        <pathelement path="${srcdir}/src" />
+        <pathelement path="${srcdir}/tools" />
+        <pathelement path="${DLC}/tty/OpenEdge.Core.pl" />
+        <pathelement path="${DLC}/tty/netlib/OpenEdge.Net.pl" />
+        <pathelement path="${DLC}/tty/ablunit.pl" />
+      </propath>
+      
+      <fileset dir="${srcdir}" excludesfile="${cicdfilesdir}/src.exclude">
+        <include name="**/*.cls" />
+        <include name="**/*.p" />
+        <include name="**/*.w" />
+        <exclude name=".builder/**/*" />
+      </fileset>
+      
+    </PCTCompile>
+  </target>
+
+  <target name="unittest" if="executeUnittests">
+
+    <ABLUnit haltOnFailure="false" writeLog="true" dlchome="${DLC}">
+      <fileset dir="${srcdir}">
+        <include name="**/*_UT.cls" />
+      </fileset> 
+      <propath>
+        <pathelement path="${srcdir}" />
+        <pathelement path="${DLC}/tty/OpenEdge.Core.pl" />
+        <pathelement path="${DLC}/tty/netlib/OpenEdge.Net.pl" />
+        <pathelement path="${DLC}/tty/ablunit.pl" />
+      </propath>
+    </ABLUnit>
+    
+  </target>
+  
+</project>

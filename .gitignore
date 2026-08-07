@@ -1,0 +1,22 @@
+# dirs
+.builder/
+.scratches/
+
+artifacts/
+bin/
+build/
+log/
+tmp/
+
+# file types
+*.dbi
+*.lbi
+*.lg
+*.log
+*.r
+*.srt
+
+# files
+.vscode/mcp.json
+.vscode/mcp.json.bak
+
