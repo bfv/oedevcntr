@@ -23,7 +23,11 @@
             "extensions": [
                 "riversidesoftware.openedge-abl-lsp@prerelease",
                 "progress-software.progress-openedge-mcp-connector-abl",
-                "vdende.vscode-scratch-playground",
+                "wayfare.ablunitrunner",
+                "redhat.vscode-xml",
+                "redhat.vscode-yaml",
+                "ms-vscode.hexeditor",
+                "anweber.vscode-httpyac"
             ]
         }
     },
