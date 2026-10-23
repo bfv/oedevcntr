@@ -1,5 +1,5 @@
 {
-    "name": "DevContainer Template",
+    "name": "DevContainer_Template",
     "dockerComposeFile": "docker-compose.yaml",
     "service": "devcontainer",
     "workspaceFolder": "/workspaces/content",

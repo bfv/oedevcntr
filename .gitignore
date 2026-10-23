@@ -16,6 +16,11 @@ tmp/
 *.r
 *.srt
 
+ldbi*
+rcdi*
+srti*
+protrace.*
+
 # files
 .vscode/mcp.json
 .vscode/mcp.json.bak
