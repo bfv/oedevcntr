@@ -1,0 +1,39 @@
+{
+	"servers": {
+		"openedge-abl-mcp-server": {
+			"command": "python3",
+			"args": [
+				"/home/openedge/.vscode-server/extensions/progress-software.progress-openedge-mcp-connector-abl-*/resources/mcp-proxy.py",
+				"https://openedge.data.progress.cloud/openedgemcp/connector4abl/mcp",
+				"$OE_MCP_API_KEY"
+			],
+			"env": {
+				"OE_MCP_API_KEY": "${env:OE_MCP_API_KEY}",
+				"PDC_ACCESS_TOKEN": ""
+			}
+		}
+	},
+	"openedge-schema": {
+		"command": "/home/openedge/.local/bin/uvx",
+		"args": [
+			"--from",
+			"git+https://github.com/bfv/openedge-schema-mcp.git@v0.5.4#subdirectory=openedge-schema-mcp",
+			"openedge-schema-mcp"
+		],
+		"env": {
+			"OPENEDGE_PROJECT_FILE": "${workspaceFolder}/openedge-project.json",
+			"OPENEDGE_SCHEMA_RELATIONS_DIR": "${workspaceFolder}/db/schema-relations"
+		}
+	},
+	"openedge-xref": {
+		"command": "/home/openedge/.local/bin/uvx",
+		"args": [
+			"--from",
+			"git+https://github.com/bfv/openedge-xref-mcp.git@v0.3.0-rc1#subdirectory=openedge-xref-mcp",
+			"openedge-xref-mcp",
+			"--root",
+			"${workspaceFolder}/.builder"
+		]
+	},
+	"inputs": []
+}

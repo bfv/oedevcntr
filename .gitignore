@@ -22,6 +22,6 @@ srti*
 protrace.*
 
 # files
-.vscode/mcp.json
 .vscode/mcp.json.bak
 
+sandbox/

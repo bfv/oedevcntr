@@ -4,6 +4,7 @@
 
 - Follow [coding-standards.md](../.ai/rules/coding-standards.md) for every ABL change.
 - Follow [testing.md](../.ai/rules/testing.md) to design, implement and validate tests.
+- Follow [db-naming-conventions.md](../.ai/rules/db-naming-conventions.md) for database naming standards.
 - Treat existing code and project documentation as the source of truth for business rules, database schema and naming. State missing context or assumptions explicitly.
 
 ## OpenEdge knowledge
